@@ -1,5 +1,8 @@
+'use client'
+
 import { useState, useRef } from 'react';
-import videoSrc from '../assets/video.mp4';
+import videoSrc from '@/assets/video.mp4';
+import { assetUrl } from '@/lib/asset';
 import './VideoLoader.css';
 
 export default function VideoLoader() {
@@ -31,7 +34,7 @@ export default function VideoLoader() {
     <div className={`video-loader-container ${fading ? 'fade-out' : ''}`}>
       <video
         ref={videoRef}
-        src={videoSrc}
+        src={assetUrl(videoSrc)}
         autoPlay
         muted
         playsInline

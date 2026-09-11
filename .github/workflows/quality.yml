@@ -14,15 +14,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: oven-sh/setup-bun@v2
         with:
-          version: 10.33.0
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm lint
-      - run: pnpm typecheck
-      - run: pnpm test
-      - run: pnpm build
+          bun-version-file: .bun-version
+      - run: bun install --frozen-lockfile
+      - name: Verify Convex generated API is present
+        run: test -f convex/_generated/api.d.ts && test -f convex/_generated/dataModel.d.ts
+      - run: bun run lint
+      - run: bun run typecheck
+      - run: bun run test
+      - name: Production build
+        run: bun run build
+        env:
+          # Real secrets optional; without them the site builds in “setup needed” mode
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
+          CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
+          NEXT_PUBLIC_CONVEX_URL: ${{ secrets.NEXT_PUBLIC_CONVEX_URL }}

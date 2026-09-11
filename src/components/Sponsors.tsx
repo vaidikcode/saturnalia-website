@@ -1,19 +1,22 @@
+'use client'
+
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-import peacock from "../assets/peacock.png";
-import bird from "../assets/bird.png";
-import sponsorFrameImg from "../assets/sponsor_frame.png";
-import vine from "../assets/vine.png";
+import peacock from "@/assets/peacock.png";
+import bird from "@/assets/bird.png";
+import sponsorFrameImg from "@/assets/sponsor_frame.png";
+import vine from "@/assets/vine.png";
 
+import { assetUrl } from "@/lib/asset";
 import "./Sponsors.css";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const SponsorFrame = ({ className = "" }) => (
   <img 
-    src={sponsorFrameImg} 
+    src={assetUrl(sponsorFrameImg)} 
     alt="Sponsor Frame" 
     className={`sponsor-frame ${className}`} 
   />
@@ -28,8 +31,7 @@ export default function Sponsors() {
     const track = trackRef.current;
     if (!section || !track) return;
 
-    // Lenis is handled globally by Hero.tsx, so we don't initialize it here to avoid conflicts.
-
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const ctx = gsap.context(() => {
       const getScrollAmount = () => {
@@ -85,7 +87,7 @@ export default function Sponsors() {
         
         {/* PEACOCK */}
         <div className="sponsors-peacock">
-          <img src={bird} alt="Peacock" onLoad={() => setTimeout(() => ScrollTrigger.refresh(), 100)} />
+          <img src={assetUrl(bird)} alt="Peacock" onLoad={() => setTimeout(() => ScrollTrigger.refresh(), 100)} />
         </div>
 
         {/* CONTENT */}
@@ -110,7 +112,7 @@ export default function Sponsors() {
           {/* RIGHT SIDE SPONSORS (Co-Title & Power) */}
           <div className="right-sponsors-wrapper">
             <div className="vines-row">
-              <img src={vine} alt="Vine decoration" className="vine-decoration" />
+              <img src={assetUrl(vine)} alt="Vine decoration" className="vine-decoration" />
             </div>
 
             <div className="sponsor-group co-title-group">
@@ -141,7 +143,7 @@ export default function Sponsors() {
 
         {/* LOTUS */}
         <div className="sponsors-lotus">
-          <img src={peacock} alt="Lotus" onLoad={() => setTimeout(() => ScrollTrigger.refresh(), 100)} />
+          <img src={assetUrl(peacock)} alt="Lotus" onLoad={() => setTimeout(() => ScrollTrigger.refresh(), 100)} />
         </div>
 
       </div>

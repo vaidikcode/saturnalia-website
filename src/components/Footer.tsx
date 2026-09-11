@@ -1,7 +1,10 @@
+'use client'
+
 import { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import cloudImg from '../assets/lib_cloud_img.png';
+import cloudImg from '@/assets/lib_cloud_img.png';
+import { assetUrl } from '@/lib/asset';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -10,6 +13,7 @@ export default function Footer() {
   const imageRef = useRef<HTMLImageElement>(null);
 
   useLayoutEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const ctx = gsap.context(() => {
       // Scale the image slightly up to allow for parallax travel without revealing edges
       // We use a safe translation limit (8%) to ensure no subpixel gaps appear
@@ -53,7 +57,7 @@ export default function Footer() {
     >
       <img
         ref={imageRef}
-        src={cloudImg}
+        src={assetUrl(cloudImg)}
         alt="Cloud Transition"
         style={{
           height: '100vh',

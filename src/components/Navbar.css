@@ -178,3 +178,10 @@
         display: none;
     }
 }
+
+.nav-soon {
+  font-size: 0.65em;
+  opacity: 0.65;
+  text-transform: lowercase;
+  letter-spacing: 0.02em;
+}

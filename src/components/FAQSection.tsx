@@ -1,8 +1,11 @@
+'use client'
+
 import React, { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { assetUrl } from "@/lib/asset";
 import "./FAQSection.css";
-import faqIcon from "../assets/faq_icon.png";
+import faqIcon from "@/assets/faq_icon.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -19,7 +22,7 @@ const FAQQuestion: React.FC<FAQQuestionProps> = ({ question, answer, alignLeft }
         <>
           <div className="faq-line"></div>
           <div className="faq-center-content">
-            <img src={faqIcon} alt="FAQ Icon" className="faq-icon" />
+            <img src={assetUrl(faqIcon)} alt="FAQ Icon" className="faq-icon" />
             <div className="faq-text faq-text-left">
               <h3 className="faq-question-title">
                 {question} <span className="faq-dot">●</span>
@@ -39,7 +42,7 @@ const FAQQuestion: React.FC<FAQQuestionProps> = ({ question, answer, alignLeft }
               </h3>
               <p className="faq-answer">{answer}</p>
             </div>
-            <img src={faqIcon} alt="FAQ Icon" className="faq-icon" />
+            <img src={assetUrl(faqIcon)} alt="FAQ Icon" className="faq-icon" />
           </div>
           <div className="faq-line"></div>
         </>
@@ -52,8 +55,9 @@ export default function FAQSection() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useLayoutEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const ctx = gsap.context(() => {
-      gsap.utils.toArray(".faq-row").forEach((el: any) => {
+      gsap.utils.toArray<Element>(".faq-row").forEach((el) => {
         gsap.fromTo(
           el,
           { opacity: 0, y: 50 },

@@ -1,23 +1,26 @@
+'use client'
+
 import { useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import "./Hero.css"
-import bgImage from "../assets/bg.png";
-import satwallVideo from "../assets/SATwall.webm";
-import flowerImage from "../assets/flower.png";
-import logoImage from "../assets/logo.png";
-import afterMovieFrame from "../assets/aftermovie_frame.png";
-import M from "../assets/M.png";
+import bgImage from "@/assets/bg.png";
+import satwallVideo from "@/assets/SATwall.webm";
+import flowerImage from "@/assets/flower.png";
+import logoImage from "@/assets/logo.png";
+import afterMovieFrame from "@/assets/aftermovie_frame.png";
+import M from "@/assets/M.png";
 import Navbar from "./Navbar";
 import Sponsors from "./Sponsors";
 import FAQSection from "./FAQSection";
 import Footer from "./Footer";
-import { track } from '../lib/telemetry';
+import { assetUrl } from "@/lib/asset";
+import { track } from "@/lib/telemetry";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function App() {
+export default function LandingPage() {
   const appRef = useRef(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const lenisRef = useRef<Lenis | null>(null);
@@ -25,6 +28,11 @@ export default function App() {
   const [hasEnded, setHasEnded] = useState(false);
 
   useLayoutEffect(() => {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) {
+      return;
+    }
+
     const lenis = new Lenis({
       duration: 1.2,
       smoothWheel: true,
@@ -577,8 +585,8 @@ export default function App() {
       <div className="fixed-bg">
         <video
           ref={videoRef}
-          src={satwallVideo}
-          poster={bgImage}
+          src={assetUrl(satwallVideo)}
+          poster={assetUrl(bgImage)}
           className="hero-image hero-video"
           playsInline
           preload="auto"
@@ -598,11 +606,11 @@ export default function App() {
           HERO
       ===================================================== */}
 
-      <section className="hero">
+      <section id="home" className="hero">
 
         <div className="hero-title">
           <img
-            src={logoImage}
+            src={assetUrl(logoImage)}
             alt="Saturnalia Logo"
             className={`hero-center-logo ${isPlaying ? "fade-out" : ""}`}
           />
@@ -647,7 +655,7 @@ export default function App() {
           <div className="semicircle-wrapper">
             <div className="semicircle-top">
               <div className="flower-text-left">51st</div>
-              <img src={flowerImage} alt="Flower icon" className="flower-icon" />
+              <img src={assetUrl(flowerImage)} alt="Flower icon" className="flower-icon" />
               <div className="flower-text-right">EDITION</div>
             </div>
             
@@ -671,7 +679,7 @@ export default function App() {
         <h2 className="memories-title">MEMORIES OF YESTERYEAR</h2>
         
         <div className="video-container">
-          <img src={afterMovieFrame} alt="Frame" className="video-frame" />
+          <img src={assetUrl(afterMovieFrame)} alt="Frame" className="video-frame" />
           <div className="iframe-wrapper">
              <iframe width="560" height="315" src="https://www.youtube.com/embed/sYe0Ssz0M3s?si=nmK1ZAPvdfGeGXxt" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
           </div>
@@ -693,7 +701,7 @@ export default function App() {
 
         <div className="residence-image-wrapper">
           <img
-            src={M}
+            src={assetUrl(M)}
             alt=""
             className="residence-image"
           />
