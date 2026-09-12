@@ -1,6 +1,7 @@
 import { v } from 'convex/values'
 import { internalMutation, internalQuery, query } from './_generated/server'
 import { backendEventValidator } from './lib/events'
+import { reportBackendError } from './lib/reportError'
 
 export const enqueue = internalMutation({
   args: {
@@ -88,5 +89,26 @@ export const getOutboxStats = query({
       .withIndex('by_undelivered', (q) => q.eq('deliveredAt', undefined))
       .take(50)
     return { undeliveredSample: rows.length }
+  },
+})
+
+/**
+ * Manual probe for PostHog Error Tracking (run from Convex dashboard).
+ * Requires Convex env `POSTHOG_API_KEY` (+ optional `POSTHOG_HOST`).
+ */
+export const enqueueTestException = internalMutation({
+  args: {
+    marker: v.optional(v.string()),
+  },
+  returns: v.null(),
+  handler: async (ctx, args) => {
+    const suffix = args.marker ? `: ${args.marker}` : ''
+    await reportBackendError(ctx, {
+      source: 'telemetry.enqueueTestException',
+      error: new Error(`Convex backend error-tracking probe${suffix}`),
+      distinctId: 'convex_probe',
+      extra: { probe: 'true' },
+    })
+    return null
   },
 })

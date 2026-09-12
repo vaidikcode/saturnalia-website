@@ -263,7 +263,7 @@ Development webhooks (optional). Not required for local profile create (client `
 | `CLERK_JWT_ISSUER_DOMAIN` | **Production** Clerk Frontend API URL |
 | `CLERK_CONVEX_WEBHOOK_BRIDGE_SECRET` | same bridge secret as local/Vercel (or a new prod-only secret, but then Next prod must match) |
 | `FIRST_ADMIN_SUBJECT` | optional `user_…` from prod Clerk |
-| `POSTHOG_API_KEY` / `POSTHOG_HOST` | optional outbox flush |
+| `POSTHOG_API_KEY` / `POSTHOG_HOST` | project `phc_…` key for outbox + backend `$exception` flush |
 
 3. Project Settings → Deploy Keys:
    - **Production** deploy key → GitHub secret `CONVEX_DEPLOY_KEY_PRODUCTION`
@@ -363,8 +363,9 @@ Convex + Vercel are not atomic: if Convex succeeds and Vercel fails, data may al
    - `error-tracking-enabled`
    - `site-launched` (keep off until public launch)
 3. Set `NEXT_PUBLIC_POSTHOG_KEY` / `HOST` on Vercel Preview + Production only.
-4. If those are set on Vercel, also set `POSTHOG_API_KEY` + `POSTHOG_PROJECT_ID` for source maps.
-5. Optional: same `POSTHOG_API_KEY` on Convex for outbox flush.
+4. If those are set on Vercel, also set `POSTHOG_API_KEY` + `POSTHOG_PROJECT_ID` for source maps (personal `phx_…` key is OK for upload).
+5. Convex Production (+ Preview if used): set `POSTHOG_API_KEY` to the **project** key (`phc_…`) and optional `POSTHOG_HOST` for outbox product events **and** backend `$exception` flush.
+6. Verify backend errors: Convex dashboard → run internal `telemetry:enqueueTestException` → PostHog → Error Tracking shows `Convex backend error-tracking probe`.
 
 Local stays silent without the public key (intentional).
 

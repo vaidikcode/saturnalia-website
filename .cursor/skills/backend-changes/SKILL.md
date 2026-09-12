@@ -17,11 +17,11 @@ description: >-
 2. Await all promises (`ctx.db.*`, `ctx.scheduler.*`).
 3. Prefer indexes (`withIndex`) over `.filter()`. Paginate unbounded lists.
 4. Deny-by-default auth via `convex/lib/auth.ts`. Never grant staff because of email domain.
-5. **Never** call PostHog (or any network analytics) inside queries/mutations. Enqueue `telemetryOutbox` rows; `telemetryActions.flushOutbox` delivers with retry + `eventId` dedup.
+5. **Never** call PostHog (or any network analytics) inside queries/mutations. Enqueue `telemetryOutbox` rows; `telemetryActions.flushOutbox` delivers with retry + `eventId` dedup. Backend exceptions use `reportBackendError` → outbox name `backend_exception` → flushed as PostHog `$exception`.
 6. Schedule only `internal.*` functions.
 7. `"use node"` files may export actions only — no queries/mutations.
 8. Schema changes are additive (expand → migrate → contract). Deploying schema is not a data migration.
-9. Document new backend events in `docs/analytics/events.md` or note why none apply.
+9. Document new backend events in `docs/analytics/events.md` or note why none apply. Exception reporting still counts as an analytics change.
 10. Keep Expo consumers compatible: regenerate `contracts/convex-api.ts` when public API changes.
 
 ## Checklist

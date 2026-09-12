@@ -2,6 +2,7 @@ import { v } from 'convex/values'
 import { internal } from './_generated/api'
 import { mutation, query } from './_generated/server'
 import { requireAdmin, requireIdentity } from './lib/auth'
+import { reportBackendError } from './lib/reportError'
 
 const configValidator = v.object({
   _id: v.id('festivalConfig'),
@@ -73,6 +74,12 @@ export const upsert = mutation({
       })
     } catch (error) {
       console.error('telemetry enqueue failed', error)
+      await reportBackendError(ctx, {
+        source: 'festivalConfig.upsert.telemetry',
+        error,
+        distinctId: admin.clerkSubject,
+        extra: { admin_profile_id: admin._id },
+      })
     }
 
     return id
