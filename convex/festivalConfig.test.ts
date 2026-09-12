@@ -33,4 +33,14 @@ describe('telemetry outbox', () => {
     expect(undelivered).toHaveLength(1)
     expect(undelivered[0]?.eventId).toBe('evt-1')
   })
+
+  it('enqueues backend_exception probe rows', async () => {
+    const t = convexTest(schema, modules)
+    await t.mutation(internal.telemetry.enqueueTestException, { marker: 'ci' })
+    const undelivered = await t.query(internal.telemetry.listUndelivered, { limit: 10 })
+    expect(undelivered.some((row) => row.name === 'backend_exception')).toBe(true)
+    const row = undelivered.find((row) => row.name === 'backend_exception')
+    expect(row?.properties.exception_message).toContain('error-tracking probe')
+    expect(row?.properties.probe).toBe('true')
+  })
 })

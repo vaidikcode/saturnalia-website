@@ -13,6 +13,7 @@ export const CLIENT_EVENTS = [
 export const BACKEND_EVENTS = [
   'profile_ensured',
   'festival_config_updated',
+  'backend_exception',
 ] as const
 
 export type ClientEventName = (typeof CLIENT_EVENTS)[number]

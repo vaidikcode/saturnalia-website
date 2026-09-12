@@ -12,6 +12,8 @@ import type * as crons from "../crons.js";
 import type * as festivalConfig from "../festivalConfig.js";
 import type * as lib_auth from "../lib/auth.js";
 import type * as lib_events from "../lib/events.js";
+import type * as lib_reportError from "../lib/reportError.js";
+import type * as lib_sanitize from "../lib/sanitize.js";
 import type * as profiles from "../profiles.js";
 import type * as telemetry from "../telemetry.js";
 import type * as telemetryActions from "../telemetryActions.js";
@@ -28,6 +30,8 @@ declare const fullApi: ApiFromModules<{
   festivalConfig: typeof festivalConfig;
   "lib/auth": typeof lib_auth;
   "lib/events": typeof lib_events;
+  "lib/reportError": typeof lib_reportError;
+  "lib/sanitize": typeof lib_sanitize;
   profiles: typeof profiles;
   telemetry: typeof telemetry;
   telemetryActions: typeof telemetryActions;

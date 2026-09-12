@@ -2,6 +2,7 @@ import { v } from 'convex/values'
 import { internal } from './_generated/api'
 import { mutation, query } from './_generated/server'
 import { getProfileByClerkSubject, requireIdentity } from './lib/auth'
+import { reportBackendError } from './lib/reportError'
 
 const profileReturn = v.object({
   _id: v.id('profiles'),
@@ -85,6 +86,11 @@ export const ensureProfile = mutation({
       })
     } catch (error) {
       console.error('telemetry enqueue failed', error)
+      await reportBackendError(ctx, {
+        source: 'profiles.ensureProfile.telemetry',
+        error,
+        distinctId: identity.subject,
+      })
     }
 
     const created = await ctx.db.get(id)
